@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.dataTables_paginate {
+	display: none;
+}
+</style>
+</head>
+<body>
+	<table id="cpusTable" class="display">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Clock</th>
+			<th>Cache</th>
+			<th>Cores</th>
+			<th>Threads</th>
+			<th>Power Consumption</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th>Name</th>
+			<th>Clock</th>
+			<th>Cache</th>
+			<th>Cores</th>
+			<th>Threads</th>
+			<th>Power Consumption</th>
+		</tr>
+	</tfoot>
+	</table>
+	<br>
+    <form id="addForm">
+		<label for="name">Name</label>
+		<input type="text" id="name" name="name">
+		<label for="clock">Clock Speed</label>
+		<input type="text" id="clock" name="clock">
+		<label for="cache">Cache</label>
+		<input type="text" id="cache" name="cache">
+		<label for="cores">Cores</label>
+		<input type="text" id="cores" name="cores">
+		<label for="threads">Threads</label>
+		<input type="text" id="threads" name="threads">
+		<label for="tdp">Consumption</label>
+		<input type="text" id="tdp" name="tdp">
+	</form>
+	<button id="add">Add CPU</button>
+</body>
+<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="scripts.js"></script>
+<script type="text/javascript" src="jquery.dataTables.min.js"></script>
+<script>
+$('#cpusTable tfoot th').each( function () {
+    var title = $(this).text();
+    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+} );
+
+var table = $('#cpusTable').DataTable( {
+    'bSort': true,
+    'lengthChange': false,
+    "scrollY":        "200px",
+    "scrollCollapse": true,
+    "info":           true,
+    "paging":         true,
+    "bPaginate": false,
+    "bInfo": false,
+    "bFilter": false
+} );
+
+table.columns().every( function () {
+	var that = this;
+
+	$( 'input', this.footer() ).on( 'keyup change', function () {
+		if ( that.search() !== this.value ) {
+			that
+				.search( this.value )
+				.draw();
+		}
+	} );
+} );
+</script>
+</html>
